@@ -1,7 +1,9 @@
 #!/usr/bin/env node
+
 // Parse command line arguments first
 const args = process.argv.slice(2);
 const scriptName = args[0] || 'stdio';
+
 async function run() {
     try {
         // Dynamically import only the requested module to prevent all modules from initializing
@@ -26,11 +28,10 @@ async function run() {
                 console.log('- streamableHttp');
                 process.exit(1);
         }
-    }
-    catch (error) {
+    } catch (error) {
         console.error('Error running script:', error);
         process.exit(1);
     }
 }
+
 run();
-export {};
