@@ -26,7 +26,7 @@ import { dirname, join } from "path";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const instructions = readFileSync(join(__dirname, "instructions.md"), "utf-8");
+const instructions = readFileSync(join(__dirname, "../instructions.md"), "utf-8");
 
 const ToolInputSchema = ToolSchema.shape.inputSchema;
 type ToolInput = z.infer<typeof ToolInputSchema>;
@@ -119,7 +119,7 @@ enum PromptName {
 export const createServer = () => {
   const server = new Server(
     {
-      name: "example-servers/everything",
+      name: "soria-everything",
       version: "1.0.0",
     },
     {
@@ -446,7 +446,7 @@ export const createServer = () => {
     const tools: Tool[] = [
       {
         name: ToolName.ECHO,
-        description: "Echoes back the input",
+        description: "Echoes back the input!",
         inputSchema: zodToJsonSchema(EchoSchema) as ToolInput,
       },
       {
@@ -698,10 +698,10 @@ export const createServer = () => {
           properties: {
             color: { type: 'string', description: 'Favorite color' },
             number: { type: 'integer', description: 'Favorite number', minimum: 1, maximum: 100 },
-            pets: { 
-              type: 'string', 
-              enum: ['cats', 'dogs', 'birds', 'fish', 'reptiles'], 
-              description: 'Favorite pets' 
+            pets: {
+              type: 'string',
+              enum: ['cats', 'dogs', 'birds', 'fish', 'reptiles'],
+              description: 'Favorite pets'
             },
           }
         }
@@ -709,13 +709,13 @@ export const createServer = () => {
 
       // Handle different response actions
       const content = [];
-      
+
       if (elicitationResult.action === 'accept' && elicitationResult.content) {
         content.push({
           type: "text",
           text: `✅ User provided their favorite things!`,
         });
-        
+
         // Only access elicitationResult.content when action is accept
         const { color, number, pets } = elicitationResult.content;
         content.push({
@@ -733,7 +733,7 @@ export const createServer = () => {
           text: `⚠️ User cancelled the elicitation dialog.`,
         });
       }
-      
+
       // Include raw result for debugging
       content.push({
         type: "text",
@@ -742,7 +742,7 @@ export const createServer = () => {
 
       return { content };
     }
-    
+
     if (name === ToolName.GET_RESOURCE_LINKS) {
       const { count } = GetResourceLinksSchema.parse(args);
       const content = [];
