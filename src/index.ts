@@ -4,9 +4,9 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { isInitializeRequest } from "@modelcontextprotocol/sdk/types.js";
 import "dotenv/config";
-import { registerTools } from "./tools.js";
-import { registerResources } from "./resources.js";
-import { registerPrompts } from "./prompts.js";
+import { registerTools } from "./tools/index.js";
+import { registerResources } from "./resources/index.js";
+import { registerPrompts } from "./prompts/index.js";
 
 const app = express();
 app.use(express.json());
