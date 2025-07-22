@@ -4,6 +4,9 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { isInitializeRequest } from "@modelcontextprotocol/sdk/types.js";
 import "dotenv/config";
+import { registerTools } from "./tools.js";
+import { registerResources } from "./resources.js";
+import { registerPrompts } from "./prompts.js";
 
 const app = express();
 app.use(express.json());
@@ -34,163 +37,10 @@ app.post("/mcp", async (req: Request, res: Response) => {
       version: "1.0.0",
     });
 
-    server.registerTool(
-      "greeting",
-      {
-        title: "Greeting Tool",
-        description: "Greet the user",
-        inputSchema: {},
-      },
-      async () => {
-        const elicitationMessage = "Please input your name";
-
-        const result = await server.server.elicitInput({
-          message: elicitationMessage,
-          requestedSchema: {
-            type: "object",
-            properties: {
-              name: {
-                type: "string",
-                description: "The name of the user",
-              },
-            },
-            required: ["name"],
-          },
-        });
-
-        console.log(`Elicitation Result: ${JSON.stringify(result)}`);
-
-        return {
-          content: [
-            {
-              type: "text",
-              text: `Hello ${result.content?.name ?? "Stranger"}`,
-            },
-          ],
-        };
-      }
-    );
-
-    server.registerResource(
-      "greeting",
-      "config://user",
-      {
-        title: "User Greeting",
-        description: "Greet the user",
-        mimeType: "text/plain",
-      },
-      async (uri: any) => {
-        const elicitationMessage = "Please input your name";
-
-        const result = await server.server.elicitInput({
-          message: elicitationMessage,
-          requestedSchema: {
-            type: "object",
-            properties: { name: { type: "string" } },
-          },
-        });
-
-        console.log(`Elicitation Result: ${JSON.stringify(result)}`);
-        const name = result.content?.name ?? "Stranger";
-
-        return {
-          contents: [
-            {
-              uri: uri.href,
-              text: `Hello there, ${name}`,
-            },
-          ],
-        };
-      }
-    );
-
-    server.registerPrompt(
-      "greeting-prompt",
-      {
-        title: "User greeting",
-        description: "Greet the user by their name",
-        argsSchema: {},
-      },
-      async () => {
-        const elicitationMessage = "Please input your name";
-        const result = await server.server.elicitInput({
-          message: elicitationMessage,
-          requestedSchema: {
-            type: "object",
-            properties: { name: { type: "string" } },
-          },
-        });
-
-        const greetingPrompt = result?.content?.name
-          ? `Please greet me by my name:\n\n${result.content.name}`
-          : `I am unnamed :p`;
-
-        return {
-          messages: [
-            {
-              role: "user",
-              content: {
-                type: "text",
-                text: greetingPrompt,
-              },
-            },
-          ],
-        };
-      }
-    );
-
-    server.registerTool(
-      "contact-info",
-      {
-        title: "Contact Information Tool",
-        description: "Collect user contact information",
-        inputSchema: {},
-      },
-      async () => {
-        const elicitationMessage = "Please provide your contact information";
-
-        const result = await server.server.elicitInput({
-          message: elicitationMessage,
-          requestedSchema: {
-            type: "object",
-            properties: {
-              name: {
-                type: "string",
-                description: "Your full name",
-              },
-              email: {
-                type: "string",
-                format: "email",
-                description: "Your email address",
-              },
-              age: {
-                type: "number",
-                minimum: 18,
-                description: "Your age",
-              },
-            },
-            required: ["name", "email"],
-          },
-        });
-
-        console.log(
-          `Contact Info Elicitation Result: ${JSON.stringify(result)}`
-        );
-
-        const name = result.content?.name ?? "Unknown";
-        const email = result.content?.email ?? "No email provided";
-        const age = result.content?.age ? `, age ${result.content.age}` : "";
-
-        return {
-          content: [
-            {
-              type: "text",
-              text: `Contact information received: ${name} (${email}${age})`,
-            },
-          ],
-        };
-      }
-    );
+    // Register capabilities from separate modules
+    registerTools(server);
+    registerResources(server);
+    registerPrompts(server);
 
     await server.connect(transport);
   } else {
