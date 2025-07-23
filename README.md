@@ -2,6 +2,10 @@
 
 A comprehensive reference implementation for the [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) that demonstrates all features of the protocol. This server showcases the versatility and extensibility of MCP, demonstrating how it can be used to give Large Language Models (LLMs) secure, controlled access to tools and data sources.
 
+<a href="https://glama.ai/mcp/servers/@soriat/soria-mcp">
+  <img width="380" height="200" src="https://glama.ai/mcp/servers/@soriat/soria-mcp/badge" alt="Elicitations Demo Server MCP server" />
+</a>
+
 This server is built with the [TypeScript MCP SDK](https://github.com/modelcontextprotocol/typescript-sdk).
 
 ## Features
