@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
-import { ToolInput, MCP_TINY_IMAGE } from "../types.js";
+import { MCP_TINY_IMAGE } from "../shared.js";
 
 const AnnotatedMessageSchema = z.object({
   messageType: z
@@ -15,7 +15,7 @@ const AnnotatedMessageSchema = z.object({
 export const annotatedMessageTool = {
   name: "annotatedMessage",
   description: "Demonstrates how annotations can be used to provide metadata about content",
-  inputSchema: zodToJsonSchema(AnnotatedMessageSchema) as ToolInput,
+  inputSchema: zodToJsonSchema(AnnotatedMessageSchema),
   handler: async (args: any) => {
     const { messageType, includeImage } = AnnotatedMessageSchema.parse(args);
 

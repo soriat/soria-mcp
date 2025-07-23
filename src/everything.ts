@@ -8,9 +8,8 @@ import { readFileSync } from "fs";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import { setupTools } from "./tools/index.js";
-import { setupPrompts } from "./prompts/index.js";
-import { setupResources } from "./resources/index.js";
-import { EXAMPLE_COMPLETIONS } from "./types.js";
+import { setupPrompts, handlePromptCompletion } from "./prompts/index.js";
+import { setupResources, handleResourceCompletion } from "./resources/index.js";
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -99,29 +98,14 @@ export const createServer = () => {
   setupResources(server, subscriptions);
 
   server.setRequestHandler(CompleteRequestSchema, async (request) => {
-    const { ref, argument } = request.params;
+    const { ref } = request.params;
 
     if (ref.type === "ref/resource") {
-      const resourceId = ref.uri.split("/").pop();
-      if (!resourceId) return { completion: { values: [] } };
-
-      // Filter resource IDs that start with the input value
-      const values = EXAMPLE_COMPLETIONS.resourceId.filter((id) =>
-        id.startsWith(argument.value)
-      );
-      return { completion: { values, hasMore: false, total: values.length } };
+      return handleResourceCompletion(request.params);
     }
 
     if (ref.type === "ref/prompt") {
-      // Handle completion for prompt arguments
-      const completions =
-        EXAMPLE_COMPLETIONS[argument.name as keyof typeof EXAMPLE_COMPLETIONS];
-      if (!completions) return { completion: { values: [] } };
-
-      const values = completions.filter((value) =>
-        value.startsWith(argument.value)
-      );
-      return { completion: { values, hasMore: false, total: values.length } };
+      return handlePromptCompletion(request.params);
     }
 
     throw new Error(`Unknown reference type`);

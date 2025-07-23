@@ -40,3 +40,17 @@ export const setupPrompts = (server: Server) => {
     throw new Error(`Unknown prompt: ${name}`);
   });
 };
+
+
+
+export const handlePromptCompletion = ({ argument }: any) => {
+  const completions: Record<string, string[]> = {
+    style: ["casual", "formal", "technical", "friendly"],
+    temperature: ["0", "0.5", "0.7", "1.0"],
+  };
+
+  const values =
+    completions[argument.name]?.filter((v) => v.startsWith(argument.value)) || [];
+
+  return { completion: { values, hasMore: false, total: values.length } };
+};

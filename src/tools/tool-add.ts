@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
-import { ToolInput } from "../types.js";
 
 const AddSchema = z.object({
   a: z.number().describe("First number"),
@@ -10,7 +9,7 @@ const AddSchema = z.object({
 export const addTool = {
   name: "add",
   description: "Adds two numbers",
-  inputSchema: zodToJsonSchema(AddSchema) as ToolInput,
+  inputSchema: zodToJsonSchema(AddSchema),
   handler: async (args: any) => {
     const validatedArgs = AddSchema.parse(args);
     const sum = validatedArgs.a + validatedArgs.b;

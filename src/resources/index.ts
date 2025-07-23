@@ -5,8 +5,6 @@ import {
   ReadResourceRequestSchema,
   SubscribeRequestSchema,
   UnsubscribeRequestSchema,
-  CreateMessageRequest,
-  CreateMessageResultSchema
 } from "@modelcontextprotocol/sdk/types.js";
 import { PAGE_SIZE, getResourceTemplates as getTemplates, readStaticResource } from "./resource-static.js";
 import { generateAllResources } from "../lib/resources.js";
@@ -84,4 +82,19 @@ export const setupResources = (server: Server, subscriptions: Set<string>) => {
     subscriptions.delete(request.params.uri);
     return {};
   });
+};
+
+
+// Helper function to handle resource completion
+export const handleResourceCompletion = (params: any) => {
+  const { ref, argument } = params;
+  const resourceId = ref.uri.split("/").pop();
+  if (!resourceId) return { completion: { values: [] } };
+  const completions = ["1", "2", "3", "4", "5"];
+
+  // Filter resource IDs that start with the input value
+  const values = completions.filter((id: string) =>
+    id.startsWith(argument.value)
+  );
+  return { completion: { values, hasMore: false, total: values.length } };
 };

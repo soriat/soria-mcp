@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
-import { ToolInput } from "../types.js";
 import { generateAllResources } from "../lib/resources.js";
 
 const GetResourceReferenceSchema = z.object({
@@ -14,7 +13,7 @@ const GetResourceReferenceSchema = z.object({
 export const getResourceReferenceTool = {
   name: "getResourceReference",
   description: "Returns a resource reference that can be used by MCP clients",
-  inputSchema: zodToJsonSchema(GetResourceReferenceSchema) as ToolInput,
+  inputSchema: zodToJsonSchema(GetResourceReferenceSchema),
   handler: async (args: any) => {
     const validatedArgs = GetResourceReferenceSchema.parse(args);
     const resourceId = validatedArgs.resourceId;

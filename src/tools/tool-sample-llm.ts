@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
-import { ToolInput } from "../types.js";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { requestSampling } from "../lib/sampling.js";
 
@@ -15,7 +14,7 @@ const SampleLLMSchema = z.object({
 export const sampleLlmTool = {
   name: "sampleLLM",
   description: "Samples from an LLM using MCP's sampling feature",
-  inputSchema: zodToJsonSchema(SampleLLMSchema) as ToolInput,
+  inputSchema: zodToJsonSchema(SampleLLMSchema),
   handler: async (args: any, request: any, server: Server) => {
     const validatedArgs = SampleLLMSchema.parse(args);
     const { prompt, maxTokens } = validatedArgs;

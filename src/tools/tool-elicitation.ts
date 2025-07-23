@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
-import { ToolInput } from "../types.js";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { requestElicitation } from "../lib/elicitation.js";
 
@@ -9,7 +8,7 @@ const ElicitationSchema = z.object({});
 export const elicitationTool = {
   name: "startElicitation",
   description: "Demonstrates the Elicitation feature by asking the user to provide information about their favorite color, number, and pets.",
-  inputSchema: zodToJsonSchema(ElicitationSchema) as ToolInput,
+  inputSchema: zodToJsonSchema(ElicitationSchema),
   handler: async (args: any, request: any, server: Server) => {
     ElicitationSchema.parse(args);
 

@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
-import { ToolInput } from "../types.js";
 
 const EchoSchema = z.object({
   message: z.string().describe("Message to echo"),
@@ -9,7 +8,7 @@ const EchoSchema = z.object({
 export const echoTool = {
   name: "echo",
   description: "Echoes back the input!",
-  inputSchema: zodToJsonSchema(EchoSchema) as ToolInput,
+  inputSchema: zodToJsonSchema(EchoSchema),
   handler: async (args: any) => {
     const validatedArgs = EchoSchema.parse(args);
     return {

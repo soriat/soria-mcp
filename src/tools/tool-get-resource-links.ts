@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
-import { ToolInput } from "../types.js";
 import { generateAllResources } from "../lib/resources.js";
 
 const GetResourceLinksSchema = z.object({
@@ -15,7 +14,7 @@ const GetResourceLinksSchema = z.object({
 export const getResourceLinksTool = {
   name: "getResourceLinks",
   description: "Returns multiple resource links that reference different types of resources",
-  inputSchema: zodToJsonSchema(GetResourceLinksSchema) as ToolInput,
+  inputSchema: zodToJsonSchema(GetResourceLinksSchema),
   handler: async (args: any) => {
     const { count } = GetResourceLinksSchema.parse(args);
     const content: any[] = [];

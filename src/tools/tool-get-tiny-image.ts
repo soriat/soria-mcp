@@ -1,13 +1,13 @@
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
-import { ToolInput, MCP_TINY_IMAGE } from "../types.js";
+import { MCP_TINY_IMAGE } from "../shared.js";
 
 const GetTinyImageSchema = z.object({});
 
 export const getTinyImageTool = {
   name: "getTinyImage",
   description: "Returns the MCP_TINY_IMAGE",
-  inputSchema: zodToJsonSchema(GetTinyImageSchema) as ToolInput,
+  inputSchema: zodToJsonSchema(GetTinyImageSchema),
   handler: async (args: any) => {
     GetTinyImageSchema.parse(args);
     return {

@@ -28,7 +28,7 @@ export const getTools = (): Tool[] => {
   return allTools.map((tool) => ({
     name: tool.name,
     description: tool.description,
-    inputSchema: tool.inputSchema,
+    inputSchema: tool.inputSchema as any,
   }));
 };
 

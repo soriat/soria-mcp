@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
-import { ToolInput } from "../types.js";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 
 const LongRunningOperationSchema = z.object({
@@ -14,7 +13,7 @@ const LongRunningOperationSchema = z.object({
 export const longRunningOperationTool = {
   name: "longRunningOperation",
   description: "Demonstrates a long running operation with progress updates",
-  inputSchema: zodToJsonSchema(LongRunningOperationSchema) as ToolInput,
+  inputSchema: zodToJsonSchema(LongRunningOperationSchema),
   handler: async (args: any, request: any, server: Server) => {
     const validatedArgs = LongRunningOperationSchema.parse(args);
     const { duration, steps } = validatedArgs;

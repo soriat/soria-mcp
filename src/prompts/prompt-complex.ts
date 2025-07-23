@@ -1,4 +1,4 @@
-import { MCP_TINY_IMAGE } from "../types.js";
+import { MCP_TINY_IMAGE } from "../shared.js";
 
 export const complexPrompt = {
   name: 'complex_prompt',
