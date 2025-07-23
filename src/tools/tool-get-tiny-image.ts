@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
-import { MCP_TINY_IMAGE } from "../shared.js";
+import { MCP_TINY_IMAGE } from "../lib/shared.js";
 
 const GetTinyImageSchema = z.object({});
 
