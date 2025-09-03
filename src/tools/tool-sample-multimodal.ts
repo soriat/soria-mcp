@@ -70,7 +70,6 @@ export const sampleMultimodalTool = {
         messages: typedMessages,
         systemPrompt,
         maxTokens,
-        includeContext: "thisServer",
       },
       server
     );

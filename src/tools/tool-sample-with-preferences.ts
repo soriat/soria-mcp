@@ -47,26 +47,15 @@ const SampleWithPreferencesSchema = z.object({
   modelPreferences: ModelPreferencesSchema.optional().describe(
     "Model selection preferences"
   ),
-  includeContext: z
-    .enum(["none", "thisServer", "allServers"])
-    .optional()
-    .describe("Whether to include MCP context in the request"),
 });
 
 export const sampleWithPreferencesTool = {
   name: "sampleWithPreferences",
-  description:
-    "Sample from an LLM with detailed model preferences and context control",
+  description: "Sample from an LLM with detailed model preferences",
   inputSchema: zodToJsonSchema(SampleWithPreferencesSchema),
   handler: async (args: any, request: any, server: Server) => {
     const validatedArgs = SampleWithPreferencesSchema.parse(args);
-    const {
-      prompt,
-      systemPrompt,
-      maxTokens,
-      modelPreferences,
-      includeContext,
-    } = validatedArgs;
+    const { prompt, systemPrompt, maxTokens, modelPreferences } = validatedArgs;
 
     const result = await requestSampling(
       {
@@ -82,7 +71,6 @@ export const sampleWithPreferencesTool = {
         systemPrompt,
         maxTokens,
         modelPreferences: modelPreferences as ModelPreferences,
-        includeContext,
       },
       server
     );

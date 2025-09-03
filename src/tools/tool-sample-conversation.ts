@@ -63,7 +63,6 @@ export const sampleConversationTool = {
         systemPrompt,
         maxTokens,
         modelPreferences,
-        includeContext: "thisServer",
       },
       server
     );

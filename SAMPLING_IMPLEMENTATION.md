@@ -14,7 +14,6 @@ The sampling implementation provides a standardized way for the MCP server to re
 - ✅ **Standard Message Format**: Implements `sampling/createMessage` requests with proper JSON-RPC structure
 - ✅ **Model Preferences**: Full support for cost, speed, and intelligence priorities with model hints
 - ✅ **Multimodal Content**: Support for text, image, and audio content types
-- ✅ **Context Control**: Support for `includeContext` levels (none, thisServer, allServers)
 
 ### 2. Enhanced Sampling Library (`src/lib/sampling.ts`)
 
@@ -72,12 +71,12 @@ export const requestTextSampling = async (
 - Optimized model preferences for conversation quality
 - Formatted conversation display
 
-#### Context-Aware Sampling (`tool-sample-with-context.ts`)
+#### Advanced Sampling with Optimization (`tool-sample-with-context.ts`)
 
-- Configurable MCP context inclusion levels
-- Context explanation capabilities
-- Optimized for context understanding tasks
-- Detailed response analysis
+- Model selection optimization strategies (intelligence, speed, cost, balanced)
+- Intelligent model prioritization options
+- Comprehensive model preference configuration
+- Detailed response analysis with optimization metrics
 
 ## Model Preference System
 
@@ -144,7 +143,7 @@ The implementation follows MCP security guidelines:
 
 - **Human-in-the-loop**: All sampling requests should be reviewed by users
 - **Content Validation**: Proper type checking and validation of all inputs
-- **Context Control**: Explicit control over what context is included
+
 - **Error Handling**: Graceful handling of sampling failures
 - **Rate Limiting**: Support for client-side rate limiting
 
@@ -179,7 +178,6 @@ const result = await requestSampling(
       costPriority: 0.3,
     },
     maxTokens: 200,
-    includeContext: "thisServer",
   },
   server
 );
@@ -215,7 +213,7 @@ All sampling tools are automatically registered in the server's tool registry:
 - `sampleWithPreferences` - Advanced preference-based sampling
 - `sampleMultimodal` - Multimodal content sampling
 - `sampleConversation` - Conversation continuation
-- `sampleWithContext` - Context-aware sampling
+- `sampleAdvanced` - Advanced optimization-based sampling
 
 ## Testing and Validation
 

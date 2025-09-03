@@ -51,7 +51,6 @@ export interface SamplingOptions {
   modelPreferences?: ModelPreferences;
   systemPrompt?: string;
   maxTokens?: number;
-  includeContext?: "none" | "thisServer" | "allServers";
 }
 
 // Enhanced sampling helper with full specification support
@@ -66,7 +65,6 @@ export const requestSampling = async (
       modelPreferences: options.modelPreferences,
       systemPrompt: options.systemPrompt,
       maxTokens: options.maxTokens ?? 100,
-      includeContext: options.includeContext,
     },
   };
 
@@ -95,7 +93,6 @@ export const requestTextSampling = async (
       systemPrompt,
       maxTokens,
       modelPreferences,
-      includeContext: "thisServer",
     },
     server
   );

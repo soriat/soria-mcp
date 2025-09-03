@@ -3,52 +3,83 @@ import { zodToJsonSchema } from "zod-to-json-schema";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { requestSampling } from "../lib/sampling.js";
 
-const ContextSampleSchema = z.object({
+const AdvancedSampleSchema = z.object({
   prompt: z.string().describe("The main prompt to send to the LLM"),
-  contextLevel: z
-    .enum(["none", "thisServer", "allServers"])
-    .default("thisServer")
-    .describe("Level of MCP context to include"),
   systemPrompt: z
     .string()
-    .default("You are an assistant with access to MCP server context.")
-    .describe("System prompt explaining context availability"),
+    .default("You are a helpful and intelligent assistant.")
+    .describe("System prompt to guide the LLM's behavior"),
   maxTokens: z
     .number()
     .default(200)
     .describe("Maximum number of tokens to generate"),
-  explainContext: z
+  useIntelligentModel: z
     .boolean()
-    .default(false)
-    .describe(
-      "Whether to ask the LLM to explain what context it has access to"
-    ),
+    .default(true)
+    .describe("Whether to prioritize intelligent models for complex tasks"),
+  optimizeFor: z
+    .enum(["intelligence", "speed", "cost", "balanced"])
+    .default("balanced")
+    .describe("What to optimize the model selection for"),
 });
 
 export const sampleWithContextTool = {
-  name: "sampleWithContext",
-  description: "Sample from an LLM with different levels of MCP server context",
-  inputSchema: zodToJsonSchema(ContextSampleSchema),
+  name: "sampleAdvanced",
+  description: "Sample from an LLM with advanced model selection optimization",
+  inputSchema: zodToJsonSchema(AdvancedSampleSchema),
   handler: async (args: any, request: any, server: Server) => {
-    const validatedArgs = ContextSampleSchema.parse(args);
-    const { prompt, contextLevel, systemPrompt, maxTokens, explainContext } =
-      validatedArgs;
+    const validatedArgs = AdvancedSampleSchema.parse(args);
+    const {
+      prompt,
+      systemPrompt,
+      maxTokens,
+      useIntelligentModel,
+      optimizeFor,
+    } = validatedArgs;
 
-    // Modify prompt if context explanation is requested
-    let finalPrompt = prompt;
-    if (explainContext) {
-      finalPrompt = `${prompt}
-
-Additionally, please explain what MCP server context and capabilities you have access to in this interaction.`;
+    // Build model preferences based on optimization choice
+    let modelPreferences;
+    switch (optimizeFor) {
+      case "intelligence":
+        modelPreferences = {
+          intelligencePriority: 0.9,
+          speedPriority: 0.3,
+          costPriority: 0.2,
+          hints: [{ name: "claude-3" }, { name: "gpt-4" }],
+        };
+        break;
+      case "speed":
+        modelPreferences = {
+          intelligencePriority: 0.4,
+          speedPriority: 0.9,
+          costPriority: 0.5,
+          hints: [{ name: "claude-3-haiku" }, { name: "gpt-3.5" }],
+        };
+        break;
+      case "cost":
+        modelPreferences = {
+          intelligencePriority: 0.3,
+          speedPriority: 0.6,
+          costPriority: 0.9,
+          hints: [{ name: "claude-3-haiku" }],
+        };
+        break;
+      default: // balanced
+        modelPreferences = {
+          intelligencePriority: 0.6,
+          speedPriority: 0.6,
+          costPriority: 0.6,
+          hints: [{ name: "claude-3-sonnet" }],
+        };
     }
 
-    // Set model preferences for context-aware tasks
-    const modelPreferences = {
-      intelligencePriority: 0.9, // High intelligence for context understanding
-      speedPriority: 0.5,
-      costPriority: 0.4,
-      hints: [{ name: "claude" }], // Prefer Claude models for MCP context
-    };
+    // Override with intelligent model preference if requested
+    if (useIntelligentModel && optimizeFor !== "intelligence") {
+      modelPreferences.intelligencePriority = Math.max(
+        0.7,
+        modelPreferences.intelligencePriority
+      );
+    }
 
     const result = await requestSampling(
       {
@@ -57,14 +88,13 @@ Additionally, please explain what MCP server context and capabilities you have a
             role: "user",
             content: {
               type: "text",
-              text: finalPrompt,
+              text: prompt,
             },
           },
         ],
         systemPrompt,
         maxTokens,
         modelPreferences,
-        includeContext: contextLevel,
       },
       server
     );
@@ -73,9 +103,10 @@ Additionally, please explain what MCP server context and capabilities you have a
       content: [
         {
           type: "text" as const,
-          text: `Context-Aware Sampling Result:
+          text: `Advanced Sampling Result:
 
-Context Level: ${contextLevel}
+Optimization: ${optimizeFor}
+Intelligent Model Priority: ${useIntelligentModel ? "Enabled" : "Disabled"}
 Model: ${result.model || "unknown"}
 Stop Reason: ${result.stopReason || "unknown"}
 

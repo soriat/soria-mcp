@@ -17,7 +17,7 @@ import { getResourceLinksTool } from "./tool-get-resource-links.js";
 import { sampleWithPreferencesTool } from "./tool-sample-with-preferences.js";
 import { sampleMultimodalTool } from "./tool-sample-multimodal.js";
 import { sampleConversationTool } from "./tool-sample-conversation.js";
-import { sampleWithContextTool } from "./tool-sample-with-context.js";
+import { sampleWithContextTool as sampleAdvancedTool } from "./tool-sample-with-context.js";
 
 const allTools = [
   echoTool,
@@ -28,7 +28,7 @@ const allTools = [
   sampleWithPreferencesTool,
   sampleMultimodalTool,
   sampleConversationTool,
-  sampleWithContextTool,
+  sampleAdvancedTool,
   getTinyImageTool,
   annotatedMessageTool,
   getResourceReferenceTool,
