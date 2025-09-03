@@ -6,9 +6,13 @@ import {
   SubscribeRequestSchema,
   UnsubscribeRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
-import { PAGE_SIZE, getResourceTemplates as getTemplates, readStaticResource } from "./resource-static.js";
+import {
+  PAGE_SIZE,
+  getResourceTemplates as getTemplates,
+  readStaticResource,
+} from "./resource-static.js";
 import { generateAllResources } from "../lib/resources.js";
-import { requestSampling } from "../lib/sampling.js";
+import { requestTextSampling } from "../lib/sampling.js";
 
 export const getAllResources = generateAllResources;
 export const getPageSize = () => PAGE_SIZE;
@@ -73,7 +77,13 @@ export const setupResources = (server: Server, subscriptions: Set<string>) => {
     subscriptions.add(uri);
 
     // Request sampling from client when someone subscribes
-    await requestSampling("A new subscription was started", uri, 100, server);
+    await requestTextSampling(
+      `A new subscription was started for resource: ${uri}`,
+      "You are a helpful assistant that acknowledges resource subscriptions.",
+      100,
+      server,
+      undefined
+    );
     return {};
   });
 
@@ -83,7 +93,6 @@ export const setupResources = (server: Server, subscriptions: Set<string>) => {
     return {};
   });
 };
-
 
 // Helper function to handle resource completion
 export const handleResourceCompletion = (params: any) => {

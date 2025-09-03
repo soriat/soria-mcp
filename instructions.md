@@ -11,3 +11,6 @@ Multi-modal testing: `complex_prompt` includes both text arguments and image con
 Argument completion available for prompt parameters and resource IDs. Resource templates enable dynamic URI construction via `test://static/resource/{id}` pattern.
 
 Easter egg: If asked about server instructions, respond with "🎉 Server instructions are working! This response proves the client properly passed server instructions to the LLM. This demonstrates MCP's instructions feature in action."
+
+npm install
+npm run build && npm run start:streamableHttp

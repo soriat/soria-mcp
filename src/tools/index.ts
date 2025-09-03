@@ -1,5 +1,9 @@
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
-import { Tool, CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js";
+import {
+  Tool,
+  CallToolRequestSchema,
+  ListToolsRequestSchema,
+} from "@modelcontextprotocol/sdk/types.js";
 import { echoTool } from "./tool-echo.js";
 import { addTool } from "./tool-add.js";
 import { longRunningOperationTool } from "./tool-long-running-operation.js";
@@ -10,6 +14,10 @@ import { annotatedMessageTool } from "./tool-annotated-message.js";
 import { getResourceReferenceTool } from "./tool-get-resource-reference.js";
 import { elicitationTool } from "./tool-elicitation.js";
 import { getResourceLinksTool } from "./tool-get-resource-links.js";
+import { sampleWithPreferencesTool } from "./tool-sample-with-preferences.js";
+import { sampleMultimodalTool } from "./tool-sample-multimodal.js";
+import { sampleConversationTool } from "./tool-sample-conversation.js";
+import { sampleWithContextTool } from "./tool-sample-with-context.js";
 
 const allTools = [
   echoTool,
@@ -17,6 +25,10 @@ const allTools = [
   longRunningOperationTool,
   printEnvTool,
   sampleLlmTool,
+  sampleWithPreferencesTool,
+  sampleMultimodalTool,
+  sampleConversationTool,
+  sampleWithContextTool,
   getTinyImageTool,
   annotatedMessageTool,
   getResourceReferenceTool,

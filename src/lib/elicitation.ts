@@ -1,7 +1,7 @@
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { z } from "zod";
 
-// Posible TODO: Use the elicitation function from the server
+// Possible TODO: Use the elicitation function from the server
 export const requestElicitation = async (
   message: string,
   requestedSchema: any,

@@ -11,10 +11,12 @@ import { setupTools } from "./tools/index.js";
 import { setupPrompts, handlePromptCompletion } from "./prompts/index.js";
 import { setupResources, handleResourceCompletion } from "./resources/index.js";
 
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const instructions = readFileSync(join(__dirname, "../instructions.md"), "utf-8");
+const instructions = readFileSync(
+  join(__dirname, "../instructions.md"),
+  "utf-8"
+);
 
 export const createServer = () => {
   const server = new Server(
@@ -30,8 +32,9 @@ export const createServer = () => {
         logging: {},
         completions: {},
         elicitation: {},
+        sampling: {},
       },
-      instructions
+      instructions,
     }
   );
 
@@ -78,13 +81,12 @@ export const createServer = () => {
       server.notification(message);
   }, 20000);
 
-
   // Set up update interval for stderr messages
   stdErrUpdateInterval = setInterval(() => {
     const shortTimestamp = new Date().toLocaleTimeString([], {
       hour: "2-digit",
       minute: "2-digit",
-      second: "2-digit"
+      second: "2-digit",
     });
     server.notification({
       method: "notifications/stderr",
